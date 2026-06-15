@@ -1247,3 +1247,9 @@ body {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-primary); }
 ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+/* ─── PER-THEME AVATAR PHOTOS ─── */
+.avatar-op, .avatar-aot, .avatar-sakura { display: none; }
+.theme-onepiece .avatar-op { display: block; }
+.theme-aot .avatar-aot { display: block; }
+.theme-sakura .avatar-sakura { display: block; }
