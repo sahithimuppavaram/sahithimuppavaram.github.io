@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahithi Muppavaram — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&family=Noto+Serif+JP:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body class="theme-onepiece" data-theme="onepiece">
+
+  <!-- THEME TRANSITION OVERLAY -->
+  <div id="theme-overlay" class="theme-overlay"></div>
+
+  <!-- PARTICLE CANVAS -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- PARALLAX WORLD BACKGROUND — fixed, covers full viewport always -->
+  <div id="world-bg" class="world-bg">
+    <div class="bg-layer bg-sky" id="bg-sky"></div>
+    <div class="bg-layer bg-mid" id="bg-mid"></div>
+    <div class="bg-layer bg-fore" id="bg-fore"></div>
+    <canvas id="wave-canvas"></canvas>
+    <div class="world-element" id="world-ship">
+      <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663762394165/VyTBmkHmbDwiJQK9ji3gzH/op_ship-aDaduv2yo9jCHrTzyhC5th.webp" alt="ship" />
+    </div>
+    <div class="world-element" id="world-island">
+      <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663762394165/VyTBmkHmbDwiJQK9ji3gzH/op_island-VcMMnDfDEBRQXhu9rWzvZf.webp" alt="island" />
+    </div>
+    <div class="world-element" id="world-wall">
+      <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663762394165/VyTBmkHmbDwiJQK9ji3gzH/aot_wall-MtAxvW4BTMbxwxRet6RvrV.webp" alt="wall" />
+    </div>
+    <div class="world-element" id="world-sakura-tree">
+      <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663762394165/VyTBmkHmbDwiJQK9ji3gzH/sakura_tree-Fo2xiVjJj2BQbsotna9oFK.webp" alt="sakura tree" />
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <img src="assets/sahithi.png" alt="Sahithi" style="width:36px;height:36px;object-fit:cover;border-radius:50%;border:2px solid var(--accent);" />
+      <span class="logo-name">Sahithi Muppavaram</span>
+    </div>
+    <div class="nav-links">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#experience" class="nav-link">Experience</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <a class="nav-cta" href="mailto:muppavaram.sa@northeastern.edu">
+      <span class="cta-label-op">Set Sail ⚓</span>
+      <span class="cta-label-aot">Join Corps 🗡</span>
+      <span class="cta-label-sakura">Enter Garden 🌸</span>
+    </a>
+  </nav>
+
+  <!-- THEME SWITCHER -->
+  <div id="theme-switcher">
+    <div class="switcher-label">Choose Your World</div>
+    <div class="theme-orbs">
+      <button class="theme-orb active" data-theme="onepiece" title="One Piece">
+        <span class="orb-icon">⚓</span>
+        <span class="orb-name">Grand Line</span>
+      </button>
+      <button class="theme-orb" data-theme="aot" title="Attack on Titan">
+        <span class="orb-icon">🗡</span>
+        <span class="orb-name">Survey Corps</span>
+      </button>
+      <button class="theme-orb" data-theme="sakura" title="Japanese Sakura">
+        <span class="orb-icon">🌸</span>
+        <span class="orb-name">Sakura Garden</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- SIDE MINI-MAP -->
+  <div id="minimap">
+    <div class="minimap-dot active" data-target="hero" title="Home"></div>
+    <div class="minimap-dot" data-target="about" title="About"></div>
+    <div class="minimap-dot" data-target="experience" title="Experience"></div>
+    <div class="minimap-dot" data-target="projects" title="Projects"></div>
+    <div class="minimap-dot" data-target="skills" title="Skills"></div>
+    <div class="minimap-dot" data-target="contact" title="Contact"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!--  PROJECT MODAL                                  -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="project-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      <div class="modal-badge" id="modal-badge"></div>
+      <h2 class="modal-title" id="modal-title"></h2>
+      <p class="modal-period" id="modal-period"></p>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-highlights" id="modal-highlights"></div>
+      <div class="modal-tech" id="modal-tech"></div>
+      <div class="modal-links" id="modal-links"></div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+
+    <!-- HERO -->
+    <section id="hero" class="section section-hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-op">⚓ Ship's Log · Est. 2026</span>
+          <span class="badge-aot">🗡 Survey Corps · File 001</span>
+          <span class="badge-sakura">🌸 Sakura Chronicle · Spring</span>
+        </div>
+        <h1 class="hero-name">
+          <span class="name-first">SAHITHI</span>
+          <span class="name-last">MUPPAVARAM</span>
+        </h1>
+        <div class="hero-roles">
+          <span id="typewriter"></span><span class="cursor">|</span>
+        </div>
+        <p class="hero-tagline">
+          <span class="tagline-op">MS grad building real things with AI. LLMs, computer vision, and everything in between.</span>
+          <span class="tagline-aot">Early career, serious about the craft. Shipping AI tools and learning fast.</span>
+          <span class="tagline-sakura">Always learning and curious. Turning ideas into things that actually run.</span>
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">
+            <span class="btn-op">See My Projects ⚓</span>
+            <span class="btn-aot">View My Work 🗡</span>
+            <span class="btn-sakura">See My Work 🌸</span>
+          </a>
+          <a href="mailto:muppavaram.sa@northeastern.edu" class="btn btn-secondary">Say Hello</a>
+        </div>
+        <div class="hero-links">
+          <a href="https://linkedin.com/in/sahithi-muppavaram" target="_blank" class="hero-link">LinkedIn</a>
+          <span class="hero-link-sep">·</span>
+          <a href="mailto:muppavaram.sa@northeastern.edu" class="hero-link">Email</a>
+          <span class="hero-link-sep">·</span>
+          <span class="hero-link">(919) 806-6305</span>
+        </div>
+        <div class="scroll-hint">
+          <span class="scroll-text-op">SCROLL TO SET SAIL</span>
+          <span class="scroll-text-aot">SCROLL TO ADVANCE</span>
+          <span class="scroll-text-sakura">SCROLL TO WANDER</span>
+          <div class="scroll-arrow"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section section-panel">
+      <div class="panel-container slide-in-left">
+        <div class="panel-header">
+          <span class="panel-log-op">⚓ Log 01 · Origin Island</span>
+          <span class="panel-log-aot">🗡 Report 01 · Soldier Profile</span>
+          <span class="panel-log-sakura">🌸 Scroll 01 · The Wanderer</span>
+        </div>
+        <h2 class="panel-title">About Me</h2>
+        <div class="about-grid">
+          <div class="about-avatar">
+            <div class="avatar-ring" style="overflow:hidden;">
+             <img src="assets/sahithi.png" alt="Sahithi Muppavaram" style="width:100%;height:100%;object-fit:cover;border-radius:50%;object-position:50% 70%;transform:scale(1.45);" />            
+            </div>
+            <div class="about-stats">
+              <div class="stat-item">
+                <span class="stat-val">MS</span>
+                <span class="stat-lbl">Student</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-val">6+</span>
+                <span class="stat-lbl">Projects</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-val">2</span>
+                <span class="stat-lbl">Internships</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-val">🏆</span>
+                <span class="stat-lbl">IEEE Published</span>
+              </div>
+            </div>
+          </div>
+          <div class="about-text">
+            <p>Hi! I'm Sahithi, a recent grad student at Northeastern University in Information Systems. I'm focused on AI/ML and enjoy building things that combine machine learning with real-world applications.</p>
+            <p>I've worked across LLM based search systems and computer vision pipelines through two roles in industry. I love building with Python, FastAPI, PyTorch, and cloud tools like AWS.</p>
+            <p>Outside of work I'm a big anime fan. The theme switcher on this portfolio is a small nod to that. It also felt more honest than a dark mode toggle.</p>
+            <div class="about-edu">
+              <div class="edu-item">
+                <div class="edu-dot"></div>
+                <div>
+                  <strong>Northeastern University</strong> — M.S. Information Systems
+                  <span class="edu-meta">Boston, MA · Jan 2024 – Apr 2026 · GPA 3.5</span>
+                </div>
+              </div>
+              <div class="edu-item">
+                <div class="edu-dot"></div>
+                <div>
+                  <strong>BVRIT Hyderabad</strong> — B.Tech Information Technology
+                  <span class="edu-meta">Hyderabad, India · Sept 2019 – Sept 2023</span>
+                </div>
+              </div>
+            </div>
+            <div class="cert-row">
+              <span class="cert-badge">IBM Data Science</span>
+              <span class="cert-badge">IBM Applied AI</span>
+              <span class="cert-badge">Google Data Analytics</span>
+              <span class="cert-badge">Infosys IoT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section section-panel section-right">
+      <div class="panel-container slide-in-right">
+        <div class="panel-header">
+          <span class="panel-log-op">⚓ Log 02 · Ports of Call</span>
+          <span class="panel-log-aot">🗡 Report 02 · Battle Record</span>
+          <span class="panel-log-sakura">🌸 Scroll 02 · Journeys Taken</span>
+        </div>
+        <h2 class="panel-title">Experience</h2>
+        <div class="exp-tabs">
+          <button class="exp-tab active" data-exp="careergpt">CareerGPT</button>
+          <button class="exp-tab" data-exp="oneconv">One Convergence</button>
+        </div>
+        <div class="exp-content active" id="exp-careergpt">
+          <div class="exp-header">
+            <div>
+              <h3 class="exp-role">AI Software Engineer Intern</h3>
+              <p class="exp-company">CareerGPT · Boston, MA</p>
+            </div>
+            <span class="exp-period">May 2025 – Dec 2025</span>
+          </div>
+          <div class="exp-metrics">
+            <div class="metric"><span class="metric-val">40%</span><span class="metric-lbl">Search relevance improvement</span></div>
+            <div class="metric"><span class="metric-val">85%+</span><span class="metric-lbl">Ranking precision</span></div>
+            <div class="metric"><span class="metric-val">1,000+</span><span class="metric-lbl">Daily active users</span></div>
+            <div class="metric"><span class="metric-val">30%</span><span class="metric-lbl">Answer relevance boost</span></div>
+          </div>
+          <ul class="exp-bullets">
+          <ul class="exp-bullets">
+           <li>Designed an LLM powered search system using LangChain and MiniLM with NLP intent parsing that translates natural language queries into structured API parameters, lifting search relevance by 40%</li>
+           <li>Built end to end entity extraction pipelines using spaCy and Hugging Face Transformers to parse resumes and job postings into structured fields, powering real time personalized recommendation engines</li>
+           <li>Developed a ranking algorithm using MiniLM vector embeddings that blends user intent, document derived feature vectors, and metadata scores to surface best fit results at over 85% precision</li>
+           <li>Deployed production ML inference services via FastAPI with async request handling, serving real time AI powered search to 1,000+ daily active users with under 200ms response times</li>
+           <li>Implemented prompt engineering and structured output parsing strategies evaluated via RAGAS metrics, improving answer relevance by 30% and reducing hallucinations over baseline</li>
+</ul>
+          </ul>
+          <div class="exp-tags">
+            <span class="tag">LangChain</span><span class="tag">MiniLM</span><span class="tag">spaCy</span><span class="tag">FastAPI</span><span class="tag">RAGAS</span><span class="tag">Hugging Face</span>
+          </div>
+        </div>
+        <div class="exp-content" id="exp-oneconv">
+          <div class="exp-header">
+            <div>
+              <h3 class="exp-role">ML Engineer</h3>
+              <p class="exp-company">One Convergence · Hyderabad, India</p>
+            </div>
+            <span class="exp-period">Dec 2022 – Dec 2023</span>
+          </div>
+          <div class="exp-metrics">
+           <div class="metric"><span class="metric-val">93%</span><span class="metric-lbl">Detection accuracy</span></div>
+           <div class="metric"><span class="metric-val">50K+</span><span class="metric-lbl">Field images trained on</span></div>
+           <div class="metric"><span class="metric-val">25+</span><span class="metric-lbl">Remote US sites covered</span></div>
+           <div class="metric"><span class="metric-val">15%</span><span class="metric-lbl">Model generalization gain</span></div>
+          </div>
+          <ul class="exp-bullets">
+           <li>Built an end to end CNN based object detection pipeline using PyTorch and OpenCV to detect faulty electrical transformers from 50K+ field images, achieving 93% detection accuracy and reducing manual inspection effort across 25+ remote US infrastructure sites</li>
+           <li>Developed a multi stage image processing workflow using NumPy and scikit-learn for feature extraction, data normalization, and stratified train/validate/test splits, improving model robustness on imbalanced real world industrial imagery</li>
+           <li>Containerized and deployed inference models using Docker and Kubernetes with TensorFlow Serving on AWS EKS, and served real time fault detections with confidence scores and geolocation metadata to 50–200 field engineers via a REST backend on AWS EC2</li>
+          <li>Maintained MLflow experiment tracking and CI/CD pipelines using Git and Docker, and ran Optuna hyperparameter tuning experiments that improved model generalization by 15% on diverse real world transformer imagery</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="tag">Python</span><span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag">AWS</span><span class="tag">MLflow</span><span class="tag">FastAPI</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section section-panel">
+      <div class="panel-container slide-in-left">
+        <div class="panel-header">
+          <span class="panel-log-op">⚓ Log 03 · Discoveries</span>
+          <span class="panel-log-aot">🗡 Report 03 · Classified Ops</span>
+          <span class="panel-log-sakura">🌸 Scroll 03 · Crafted Works</span>
+        </div>
+        <h2 class="panel-title">Projects</h2>
+        <p class="projects-hint">Click any card to see full details &amp; GitHub link</p>
+        <div class="projects-grid">
+
+          <div class="project-card" data-project="codereview" role="button" tabindex="0">
+            <div class="project-card-header">
+              <h3 class="project-name">AI Code Review Bot</h3>
+              <span class="project-date">April 2026</span>
+            </div>
+            <p class="project-desc">A GitHub bot that reviews pull requests automatically and posts inline comments about potential issues.</p>
+            <div class="project-metrics-row">
+              <span class="proj-metric"><strong>87%</strong> accuracy</span>
+              <span class="proj-metric"><strong>4</strong> severity levels</span>
+            </div>
+            <div class="project-tags">
+              <span class="tag">LangChain</span><span class="tag">GitHub API</span><span class="tag">FastAPI</span><span class="tag">Docker</span>
+            </div>
+            <div class="project-card-footer">
+              <span class="click-hint">Click to expand ↗</span>
+            </div>
+          </div>
+
+          <div class="project-card" data-project="deepfake" role="button" tabindex="0">
+            <div class="project-card-header">
+              <h3 class="project-name">Multimodal Deepfake Detector</h3>
+              <span class="project-date">March 2026</span>
+            </div>
+            <p class="project-desc">A deepfake detection tool that looks at both video frames and audio together to spot fakes more reliably.</p>
+            <div class="project-metrics-row">
+              <span class="proj-metric"><strong>96%</strong> detection accuracy</span>
+              <span class="proj-metric"><strong>30+</strong> videos/hour</span>
+            </div>
+            <div class="project-tags">
+              <span class="tag">PyTorch</span><span class="tag">EfficientNet</span><span class="tag">librosa</span><span class="tag">Celery</span>
+            </div>
+            <div class="project-card-footer">
+              <span class="click-hint">Click to expand ↗</span>
+            </div>
+          </div>
+
+          <div class="project-card" data-project="llama" role="button" tabindex="0">
+            <div class="project-card-header">
+              <h3 class="project-name">LLaMA DPO Fine-Tuning</h3>
+              <span class="project-date">April 2025</span>
+            </div>
+            <p class="project-desc">Fine-tuned LLaMA 3.2 using Direct Preference Optimization with LoRA adapters. Published the model to HuggingFace.</p>
+            <div class="project-metrics-row">
+              <span class="proj-metric"><strong>2</strong> preference datasets</span>
+              <span class="proj-metric">Published on <strong>HuggingFace</strong></span>
+            </div>
+            <div class="project-tags">
+              <span class="tag">LLaMA 3.2</span><span class="tag">LoRA</span><span class="tag">DPO</span><span class="tag">HuggingFace</span>
+            </div>
+            <div class="project-card-footer">
+              <span class="click-hint">Click to expand ↗</span>
+            </div>
+          </div>
+
+          <div class="project-card" data-project="smartcart" role="button" tabindex="0">
+            <div class="project-card-header">
+              <h3 class="project-name">Smart Cart — IoT System</h3>
+              <span class="project-date">Dec 2024</span>
+            </div>
+            <p class="project-desc">An IoT shopping cart with RFID auto-billing and weight sensors to prevent theft. Won 1st Prize at IIT Madras TechFest and published in IEEE.</p>
+            <div class="project-metrics-row">
+              <span class="proj-metric"><strong>🏆</strong> IIT Madras Winner</span>
+              <span class="proj-metric"><strong>IEEE</strong> Published</span>
+            </div>
+            <div class="project-tags">
+              <span class="tag">RFID</span><span class="tag">Python</span><span class="tag">Raspberry Pi</span><span class="tag">IoT</span>
+            </div>
+            <div class="project-card-footer">
+              <span class="click-hint">Click to expand ↗</span>
+            </div>
+          </div>
+
+          <div class="project-card" data-project="meta" role="button" tabindex="0">
+            <div class="project-card-header">
+              <h3 class="project-name">Meta Content Moderation</h3>
+              <span class="project-date">April 2025</span>
+            </div>
+            <p class="project-desc">A course project designing a big data pipeline for content moderation using Kafka, Spark, Airflow, and Cassandra.</p>
+            <div class="project-metrics-row">
+              <span class="proj-metric">Big Data <strong>Architecture</strong></span>
+              <span class="proj-metric"><strong>6</strong> frameworks used</span>
+            </div>
+            <div class="project-tags">
+              <span class="tag">Kafka</span><span class="tag">Spark</span><span class="tag">Airflow</span><span class="tag">Cassandra</span>
+            </div>
+            <div class="project-card-footer">
+              <span class="click-hint">Click to expand ↗</span>
+            </div>
+          </div>
+
+          <div class="project-card featured-card" data-project="leco" role="button" tabindex="0">
+            <div class="project-card-header">
+              <h3 class="project-name">LECO 🐱 — Chrome Extension</h3>
+              <span class="project-date">June 2026</span>
+            </div>
+            <p class="project-desc">A Chrome extension that sits on LeetCode like a little cat tutor — gives Socratic hints without ever spoiling the answer. Free for everyone via a serverless proxy.</p>
+            <div class="project-metrics-row">
+              <span class="proj-metric">🐱 <strong>Live</strong> on GitHub</span>
+              <span class="proj-metric"><strong>4</strong> hint modes</span>
+            </div>
+            <div class="project-tags">
+              <span class="tag">TypeScript</span><span class="tag">Chrome MV3</span><span class="tag">Vite</span><span class="tag">Serverless</span>
+            </div>
+            <div class="project-card-footer">
+              <span class="click-hint">Click to expand ↗</span>
+            </div>
+          </div>
+
+          <div class="project-card" data-project="eyeblink" role="button" tabindex="0">
+            <div class="project-card-header">
+              <h3 class="project-name">Eye Blink Home Automation</h3>
+              <span class="project-date">April 2025</span>
+            </div>
+            <p class="project-desc">Hands-free home automation for people with mobility challenges — uses eye blink detection via OpenCV to control appliances.</p>
+            <div class="project-metrics-row">
+              <span class="proj-metric"><strong>95%</strong> blink detection accuracy</span>
+              <span class="proj-metric">Accessibility focused</span>
+            </div>
+            <div class="project-tags">
+              <span class="tag">OpenCV</span><span class="tag">Python</span><span class="tag">Raspberry Pi</span><span class="tag">IoT</span>
+            </div>
+            <div class="project-card-footer">
+              <span class="click-hint">Click to expand ↗</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section section-panel section-right">
+      <div class="panel-container slide-in-right">
+        <div class="panel-header">
+          <span class="panel-log-op">⚓ Log 04 · Devil Fruits</span>
+          <span class="panel-log-aot">🗡 Report 04 · Combat Skills</span>
+          <span class="panel-log-sakura">🌸 Scroll 04 · Arts Mastered</span>
+        </div>
+        <h2 class="panel-title">Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-group">
+            <h4 class="skill-group-title">
+              <span class="sg-op">🌊 Languages</span>
+              <span class="sg-aot">⚔ Languages</span>
+              <span class="sg-sakura">🌸 Languages</span>
+            </h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Python</span><span class="skill-tag">SQL</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Java</span><span class="skill-tag">R</span><span class="skill-tag">PySpark</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h4 class="skill-group-title">
+              <span class="sg-op">🔥 ML & Deep Learning</span>
+              <span class="sg-aot">💥 ML & Deep Learning</span>
+              <span class="sg-sakura">🌺 ML & Deep Learning</span>
+            </h4>
+            <div class="skill-tags">
+              <span class="skill-tag">PyTorch</span><span class="skill-tag">TensorFlow</span><span class="skill-tag">Scikit-learn</span><span class="skill-tag">XGBoost</span><span class="skill-tag">Keras</span><span class="skill-tag">Hugging Face</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h4 class="skill-group-title">
+              <span class="sg-op">🌀 LLMs & NLP</span>
+              <span class="sg-aot">🗡 LLMs & NLP</span>
+              <span class="sg-sakura">📜 LLMs & NLP</span>
+            </h4>
+            <div class="skill-tags">
+              <span class="skill-tag">LangChain</span><span class="skill-tag">LlamaIndex</span><span class="skill-tag">RAG</span><span class="skill-tag">LoRA/QLoRA</span><span class="skill-tag">spaCy</span><span class="skill-tag">FAISS</span><span class="skill-tag">ChromaDB</span><span class="skill-tag">RAGAS</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h4 class="skill-group-title">
+              <span class="sg-op">👁 Computer Vision</span>
+              <span class="sg-aot">🎯 Computer Vision</span>
+              <span class="sg-sakura">🔍 Computer Vision</span>
+            </h4>
+            <div class="skill-tags">
+              <span class="skill-tag">OpenCV</span><span class="skill-tag">EfficientNet</span><span class="skill-tag">Grad-CAM</span><span class="skill-tag">SHAP</span><span class="skill-tag">Multi-Modal Fusion</span><span class="skill-tag">torchaudio</span><span class="skill-tag">ONNX Runtime</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h4 class="skill-group-title">
+              <span class="sg-op">⚡ Cloud & MLOps</span>
+              <span class="sg-aot">🏰 Cloud & MLOps</span>
+              <span class="sg-sakura">☁ Cloud & MLOps</span>
+            </h4>
+            <div class="skill-tags">
+              <span class="skill-tag">AWS SageMaker</span><span class="skill-tag">AWS EC2/S3</span><span class="skill-tag">Docker</span><span class="skill-tag">Kubernetes</span><span class="skill-tag">MLflow</span><span class="skill-tag">CI/CD</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h4 class="skill-group-title">
+              <span class="sg-op">🏴‍☠️ Backend & Databases</span>
+              <span class="sg-aot">🛡 Backend & Databases</span>
+              <span class="sg-sakura">🏯 Backend & Databases</span>
+            </h4>
+            <div class="skill-tags">
+              <span class="skill-tag">FastAPI</span><span class="skill-tag">Flask</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">MongoDB</span><span class="skill-tag">Redis</span><span class="skill-tag">Kafka</span><span class="skill-tag">Celery</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h4 class="skill-group-title">
+              <span class="sg-op">🏴‍☠️ Frontend & Tools</span>
+              <span class="sg-aot">🛡 Frontend & Tools</span>
+              <span class="sg-sakura">🎋 Frontend & Tools</span>
+             </h4>
+             <div class="skill-tags">
+              <span class="skill-tag">React</span><span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">Figma</span><span class="skill-tag">Git</span><span class="skill-tag">Prometheus</span><span class="skill-tag">Grafana</span>
+            </div>
+           </div>
+          <div class="skill-group">
+            <h4 class="skill-group-title">
+              <span class="sg-op">🗺 Data & Visualization</span>
+              <span class="sg-aot">📊 Data & Visualization</span>
+              <span class="sg-sakura">🎨 Data & Visualization</span>
+            </h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Tableau</span><span class="skill-tag">Power BI</span><span class="skill-tag">Matplotlib</span><span class="skill-tag">Seaborn</span><span class="skill-tag">Databricks</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section section-panel">
+      <div class="panel-container slide-in-left">
+        <div class="panel-header">
+          <span class="panel-log-op">⚓ Log 05 · Forge Alliance</span>
+          <span class="panel-log-aot">🗡 Report 05 · Recruit</span>
+          <span class="panel-log-sakura">🌸 Scroll 05 · Send a Wish</span>
+        </div>
+        <h2 class="panel-title">Contact</h2>
+        <p class="contact-intro">I'm looking for full-time opportunities in AI/ML and availavle immediately on OPT. Open to Full-time roles, research roles, and collaborations too — feel free to reach out!</p>
+        <div class="contact-cards">
+          <a href="mailto:muppavaram.sa@northeastern.edu" class="contact-card">
+            <span class="contact-icon">✉</span>
+            <span class="contact-label">Email</span>
+            <span class="contact-value">muppavaram.sa@northeastern.edu</span>
+          </a>
+          <a href="https://linkedin.com/in/sahithi-muppavaram" target="_blank" class="contact-card">
+            <span class="contact-icon">◈</span>
+            <span class="contact-label">LinkedIn</span>
+            <span class="contact-value">linkedin.com/in/sahithi-muppavaram</span>
+          </a>
+          <a href="tel:9198066305" class="contact-card">
+            <span class="contact-icon">◎</span>
+            <span class="contact-label">Phone</span>
+            <span class="contact-value">(919) 806-6305</span>
+          </a>
+        </div>
+        <div class="contact-cta">
+          <a href="mailto:muppavaram.sa@northeastern.edu" class="btn btn-primary btn-large">
+            <span class="btn-op">Send a Message ⚓</span>
+            <span class="btn-aot">Send a Message 🗡</span>
+            <span class="btn-sakura">Send a Message 🌸</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <span class="footer-name">Sahithi Muppavaram</span>
+    <span class="footer-sep">·</span>
+    <span class="footer-tagline-op">Sailing the Grand Line of AI/ML</span>
+    <span class="footer-tagline-aot">Beyond the Walls · Growing Every Day</span>
+    <span class="footer-tagline-sakura">Where Code Blooms Like Cherry Blossoms</span>
+    <span class="footer-sep">·</span>
+    <span class="footer-loc">Boston, MA</span>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
